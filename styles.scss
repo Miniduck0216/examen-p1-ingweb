@@ -1,0 +1,866 @@
+
+
+// ---------- 1. Variables ----------
+
+// Colores
+$color-blanco: #929597;
+$color-fondo: #f5f5f5;
+$color-texto: #151313;
+$color-texto-suave: #282626;
+$color-borde: #d1d1cf;
+$color-naranja: #ff6600;
+$color-verde: #2c833e;
+$color-verde-oscuro: #10551f;
+$color-verde-hoja: #4b8556;
+$color-lima: #b4c90a;
+$color-amarillo: #ffb800;
+$color-beige: #fff0f9f3;
+
+// Fuentes
+$fuente-titulos: "Lexend", Arial, sans-serif;
+$fuente-texto: "Work Sans", Arial, sans-serif;
+
+// Medidas
+$espacio-lateral: 6vw;
+$espacio-seccion: 80px;
+$radio-grande: 0px;
+$radio-chico: 8px;
+
+// Punto de quiebre para celulares
+$movil: 768px;
+
+
+// ---------- 2. Mixins ----------
+
+// Media query para pantallas de celular
+@mixin movil {
+  @media (max-width: $movil) {
+    @content;
+  }
+}
+
+// Tipografía: familia, tamaño y alto de línea
+@mixin fuente($familia, $tamano, $linea) {
+  font-family: $familia;
+  font-size: $tamano;
+  line-height: $linea;
+}
+
+// Espaciado de cada sección (márgenes a los lados y arriba/abajo)
+@mixin seccion {
+  padding: $espacio-seccion $espacio-lateral;
+
+  @include movil {
+    padding: 48px 20px;
+  }
+}
+
+// Fila de dos columnas con Grid que en celular pasa a una sola
+@mixin dos-columnas($espacio: 48px) {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  gap: $espacio;
+
+  @include movil {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+}
+
+// Variante de color para el componente botón
+@mixin boton-color($fondo, $texto, $borde) {
+  background: $fondo;
+  color: $texto;
+  border-color: $borde;
+}
+
+
+// ---------- 3. Componentes reutilizables (placeholders) ----------
+
+// Imagen con esquinas redondeadas que se repite en varias secciones
+%foto-redonda {
+  display: block;
+  width: 100%;
+  aspect-ratio: 5 / 4;
+  object-fit: cover;
+  border-radius: $radio-grande;
+}
+
+// Títulos de sección (h2)
+%titulo-seccion {
+  margin: 0 0 16px;
+  font-weight: 500;
+  @include fuente($fuente-titulos, 40px, 48px);
+
+  @include movil {
+    @include fuente($fuente-titulos, 28px, 36px);
+  }
+}
+
+
+// ---------- 4. Estilos base (solo etiquetas) ----------
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: $color-fondo;
+  color: $color-texto;
+  overflow-x: hidden;
+  @include fuente($fuente-texto, 16px, 26px);
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+h1,
+h2,
+h3,
+p,
+ul,
+ol,
+figure,
+blockquote {
+  margin: 0;
+  padding: 0;
+}
+
+
+// =====================================================
+//  BLOQUES
+// =====================================================
+
+// ---------- Bloque: btn ----------
+
+.btn {
+  display: inline-block;
+  padding: 14px 24px;
+  border: 1px solid transparent;
+  border-radius: $radio-chico;
+  text-decoration: none;
+  white-space: nowrap;
+  font-weight: 500;
+  @include fuente($fuente-titulos, 16px, 22px);
+
+  &:hover {
+    opacity: 0.85;
+  }
+
+  &--solid {
+    @include boton-color($color-naranja, $color-blanco, $color-naranja);
+  }
+
+  &--outline {
+    @include boton-color(transparent, $color-naranja, $color-naranja);
+  }
+
+  &--light {
+    @include boton-color(transparent, $color-blanco, $color-blanco);
+  }
+}
+
+
+// ---------- Bloque: header ----------
+
+.header {
+  background: $color-blanco;
+
+  &__top {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 8px $espacio-lateral;
+    border-bottom: 1px solid $color-borde;
+
+    @include movil {
+      padding: 8px 20px;
+    }
+  }
+
+  &__group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  &__link {
+    color: $color-texto;
+    text-decoration: none;
+    @include fuente($fuente-titulos, 14px, 18px);
+
+    &--active {
+      text-decoration: underline;
+      text-decoration-color: $color-naranja;
+      text-underline-offset: 6px;
+    }
+  }
+
+  &__main {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    padding: 12px $espacio-lateral;
+
+    @include movil {
+      flex-wrap: wrap;
+      justify-content: space-between;
+      padding: 12px 20px;
+    }
+  }
+
+  &__logo-img {
+    width: 150px;
+  }
+
+  &__menu {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+    margin-left: auto;
+
+    @include movil {
+      order: 3;
+      width: 100%;
+      gap: 12px 20px;
+      margin-left: 0;
+    }
+  }
+
+  &__menu-link {
+    color: $color-naranja;
+    text-decoration: none;
+    @include fuente($fuente-titulos, 16px, 22px);
+  }
+}
+
+
+// ---------- Bloque: hero ----------
+
+.hero {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  gap: 48px;
+  padding: 64px 0 0 $espacio-lateral;
+
+  @include movil {
+    grid-template-columns: 1fr;
+    gap: 32px;
+    padding: 40px 20px 0;
+  }
+
+  &__subtitle {
+    margin-bottom: 8px;
+    color: $color-texto-suave;
+  }
+
+  &__title {
+    margin-bottom: 16px;
+    font-weight: 500;
+    @include fuente($fuente-titulos, 56px, 68px);
+
+    @include movil {
+      @include fuente($fuente-titulos, 36px, 44px);
+    }
+  }
+
+  &__text {
+    max-width: 600px;
+    @include fuente($fuente-texto, 18px, 28px);
+  }
+
+  &__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-top: 32px;
+  }
+
+  &__visual {
+    position: relative;
+    height: 560px;
+
+    @include movil {
+      height: 360px;
+    }
+  }
+
+  // Forma verde grande con la esquina redondeada
+  &__shape {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 80px;
+    border-top-left-radius: 300px;
+    background: $color-verde;
+
+    @include movil {
+      left: 40px;
+      border-top-left-radius: 160px;
+    }
+  }
+
+  // Cuarto de círculo con la foto de helechos
+  &__fern {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 180px;
+    height: 220px;
+    border-top-left-radius: 100%;
+    background: url("img/ferns.jpg") center / cover;
+
+    @include movil {
+      width: 110px;
+      height: 140px;
+    }
+  }
+
+  &__image {
+    position: absolute;
+    bottom: 0;
+    left: 180px;
+    width: 320px;
+
+    @include movil {
+      left: 110px;
+      width: 200px;
+    }
+  }
+}
+
+
+// ---------- Bloque: promise ----------
+
+.promise {
+  background: $color-verde-oscuro;
+  color: $color-blanco;
+  text-align: center;
+  @include seccion;
+
+  &__subtitle {
+    margin-bottom: 16px;
+  }
+
+  &__text {
+    max-width: 1000px;
+    margin: 0 auto 32px;
+    @include fuente($fuente-titulos, 24px, 34px);
+
+    @include movil {
+      @include fuente($fuente-titulos, 20px, 28px);
+    }
+  }
+
+  &__highlight {
+    color: $color-lima;
+  }
+}
+
+
+// ---------- Bloque: mark (logo de 4 piezas) ----------
+
+.mark {
+  display: grid;
+  grid-template-columns: repeat(2, 60px);
+  gap: 6px;
+
+  &__piece {
+    height: 60px;
+
+    &--yellow {
+      background: $color-amarillo;
+      border-top-left-radius: 30px;
+    }
+
+    &--lime {
+      background: $color-lima;
+      border-radius: 50%;
+    }
+
+    &--leaf {
+      background: $color-verde-hoja;
+      border-bottom-left-radius: 30px;
+    }
+
+    &--green {
+      background: $color-verde;
+      border-bottom-right-radius: 30px;
+    }
+  }
+}
+
+
+// ---------- Bloque: locals ----------
+
+.locals {
+  @include seccion;
+
+  &__row {
+    @include dos-columnas(64px);
+  }
+
+  &__media {
+    position: relative;
+  }
+
+  // Posición del logo decorativo (bloque "mark") dentro de locals
+  &__mark {
+    position: absolute;
+    top: -40px;
+    left: -40px;
+
+    @include movil {
+      display: none;
+    }
+  }
+
+  &__image {
+    @extend %foto-redonda;
+  }
+
+  &__title {
+    @extend %titulo-seccion;
+    max-width: 480px;
+  }
+
+  &__text {
+    color: $color-texto-suave;
+    @include fuente($fuente-texto, 18px, 28px);
+  }
+
+  &__links {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-top: 24px;
+  }
+
+  &__link {
+    color: $color-naranja;
+    text-decoration: none;
+    @include fuente($fuente-titulos, 18px, 28px);
+  }
+
+  &__stats {
+    margin-top: 64px;
+  }
+}
+
+
+// ---------- Bloque: stats ----------
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  padding: 48px 32px;
+  border-radius: $radio-grande;
+  background: $color-blanco;
+  text-align: center;
+
+  @include movil {
+    grid-template-columns: repeat(2, 1fr);
+    padding: 32px 16px;
+  }
+
+  &__number {
+    display: block;
+    color: $color-verde;
+    font-weight: 500;
+    @include fuente($fuente-titulos, 40px, 48px);
+  }
+
+  &__label {
+    color: $color-texto-suave;
+  }
+}
+
+
+// ---------- Bloque: why ----------
+
+.why {
+  @include seccion;
+
+  &__title {
+    @extend %titulo-seccion;
+    margin-bottom: 32px;
+  }
+
+  &__row {
+    @include dos-columnas;
+    align-items: start;
+  }
+
+  &__image {
+    @extend %foto-redonda;
+  }
+}
+
+
+// ---------- Bloque: accordion ----------
+
+.accordion {
+  &__item {
+    border-bottom: 1px solid $color-borde;
+  }
+
+  &__title {
+    padding: 16px 0;
+    color: $color-naranja;
+    cursor: pointer;
+    @include fuente($fuente-titulos, 18px, 28px);
+  }
+
+  &__text {
+    padding-bottom: 16px;
+    color: $color-texto-suave;
+    @include fuente($fuente-texto, 14px, 22px);
+  }
+}
+
+
+// ---------- Bloque: wellness ----------
+
+.wellness {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  align-items: center;
+  gap: 48px;
+  @include seccion;
+
+  @include movil {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+
+  &__title {
+    @extend %titulo-seccion;
+  }
+
+  &__text {
+    max-width: 340px;
+    margin-bottom: 24px;
+    color: $color-texto-suave;
+  }
+
+  &__cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+
+    @include movil {
+      grid-template-columns: 1fr;
+    }
+  }
+}
+
+
+// ---------- Bloque: card ----------
+.card {
+  display: block;
+  overflow: hidden;
+  border-radius: $radio-grande;
+  background: $color-blanco;
+  color: $color-naranja;
+  text-decoration: none;
+  transition: background 0.3s ease-in-out, color 0.3s ease-in-out;
+
+  &__icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 200px;
+    background: $color-beige;
+    transition: background 0.3s ease-in-out; 
+  }
+
+  &__svg {
+    width: 60px;  
+    height: 60px;
+    transition: transform 0.3s ease-in-out; 
+  }
+
+  &__label {
+    display: block;
+    padding: 16px 16px 24px;
+    font-weight: 600;
+  }
+
+  &:hover {
+    background: darken($color-blanco, 15%); 
+    color: $color-blanco; 
+
+    .card__icon {
+      background: darken($color-beige, 10%); 
+    }
+
+    .card__svg {
+      transform: scale(2.2); 
+    }
+  }
+}
+
+// ---------- Bloque: controls (flechas y puntos del slider) ----------
+
+.controls {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 12px;
+  margin-top: 16px;
+  color: $color-naranja;
+
+  &__btn {
+    border: 0;
+    background: none;
+    color: inherit;
+    font-size: 18px;
+    cursor: pointer;
+  }
+
+  &__dots {
+    display: flex;
+    gap: 8px;
+  }
+
+  &__dot {
+    width: 8px;
+    height: 8px;
+    border: 1px solid currentColor;
+    border-radius: 50%;
+
+    &--active {
+      background: currentColor;
+    }
+  }
+}
+
+
+// ---------- Bloque: stories ----------
+
+.stories {
+  background: $color-lima;
+  @include seccion;
+
+  &__title {
+    @extend %titulo-seccion;
+    margin-bottom: 32px;
+  }
+
+  &__media {
+    position: relative;
+    max-width: 1100px;
+  }
+
+  // Marco de la foto: aquí se centra el botón de play
+  &__frame {
+    position: relative;
+  }
+
+  &__image {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    border-radius: $radio-chico;
+  }
+
+  &__play {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 48px;
+    height: 48px;
+    transform: translate(-50%, -50%);
+    border: 0;
+    border-radius: 50%;
+    background: $color-blanco;
+    color: $color-naranja;
+    cursor: pointer;
+  }
+
+  // Posición de la tarjeta "quote" encima de la foto
+  &__quote {
+    position: absolute;
+    right: -40px;
+    bottom: 40px;
+    width: 330px;
+
+    @include movil {
+      position: static;
+      width: auto;
+      margin-top: 16px;
+    }
+  }
+}
+
+
+// ---------- Bloque: quote ----------
+
+.quote {
+  padding: 32px;
+  border-radius: 16px;
+  background: $color-blanco;
+
+  @include movil {
+    padding: 24px;
+  }
+
+  &__text {
+    margin-bottom: 24px;
+    color: $color-verde;
+    @include fuente($fuente-titulos, 18px, 26px);
+  }
+
+  &__author {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  &__avatar {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: $radio-chico;
+  }
+
+  &__info {
+    display: flex;
+    flex-direction: column;
+    @include fuente($fuente-texto, 14px, 22px);
+  }
+
+  &__name {
+    font-weight: 600;
+  }
+}
+
+
+// ---------- Bloque: member ----------
+
+.member {
+  @include seccion;
+  @include dos-columnas;
+
+  &__image {
+    @extend %foto-redonda;
+  }
+
+  &__title {
+    @extend %titulo-seccion;
+    margin-bottom: 24px;
+  }
+}
+
+
+// ---------- Bloque: steps ----------
+
+.steps {
+  margin-bottom: 32px;
+  list-style: none;
+
+  &__item {
+    margin-bottom: 24px;
+  }
+
+  &__title {
+    margin-bottom: 4px;
+    font-weight: 500;
+    @include fuente($fuente-titulos, 18px, 28px);
+  }
+
+  &__text {
+    color: $color-texto-suave;
+    @include fuente($fuente-texto, 14px, 22px);
+  }
+}
+
+
+// ---------- Bloque: footer ----------
+
+.footer {
+  padding: 0 $espacio-lateral;
+  border-top: 1px solid $color-borde;
+  @include fuente($fuente-texto, 14px, 22px);
+
+  @include movil {
+    padding: 0 20px;
+  }
+
+  &__top {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr 1fr 1fr;
+    gap: 32px;
+    padding: 64px 0 48px;
+
+    @include movil {
+      grid-template-columns: 1fr 1fr;
+      padding: 40px 0 32px;
+    }
+  }
+
+  &__col {
+    &--main {
+      @include movil {
+        grid-column: 1 / -1;
+      }
+    }
+  }
+
+  &__logo {
+    width: 140px;
+    margin-bottom: 24px;
+  }
+
+  &__text {
+    margin-bottom: 16px;
+  }
+
+  &__title {
+    margin-bottom: 16px;
+    color: $color-texto-suave;
+    font-weight: 500;
+    @include fuente($fuente-titulos, 14px, 18px);
+  }
+
+  &__list {
+    list-style: none;
+  }
+
+  &__item {
+    margin-bottom: 8px;
+  }
+
+  &__link {
+    color: $color-naranja;
+    text-decoration: none;
+    word-break: break-word;
+  }
+
+  &__bottom {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 16px 0;
+    border-top: 1px solid $color-borde;
+  }
+
+  &__legal {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  &__legal-link {
+    color: $color-texto;
+  }
+}
